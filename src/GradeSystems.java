@@ -114,6 +114,23 @@ public class GradeSystems {
 		aUI.displayArea.setText(aGrade.name + "排名第" + rank + "\n\n");
 	}
 	
+	/* method takeAverage
+	 * 用來計算全班五個成績的個別平均
+	 * @param 無
+	 * @return 無
+	 * 
+	 * Pseudo code:
+	 * 1. 使用一個迴圈，遍歷整個Grade的list
+	 * 2. 迴圈內，每次都將lab1加到average1，lab2加到average2，
+	 * 	  lab3加到average3，midTerm加到average4，finalExam加到average5
+	 * 3. 最後得到五個成績的個別加總
+	 * (註: 在印到UI的時候再除以list長度，就是平均了)
+	 * 
+	 * Time estimate: O(n)
+	 * Example: this.takeAverage();
+	 * 得到average1=5690, average2=5526, average3=5613, average4=5640, average5=5653
+	 */
+	
 	private void takeAverage(){
 		for(int i=0; i<aList.size(); i++){
 			average1 += aList.get(i).lab1;
@@ -148,6 +165,26 @@ public class GradeSystems {
 		aUI.displayArea.append("final exam:     " + Math.round(average5/aList.size()) + "\n\n");
 	}
 	
+	/* method printWeight
+	 * 印出配分到UI上
+	 * @param para 0代表要印的是舊配分，1代表要印的是新配分
+	 * @param w1 lab1的配分
+	 * @param w2 lab2的配分
+	 * @param w3 lab3的配分
+	 * @param w4 midTerm的配分
+	 * @param w5 finalExam的配分
+	 * @return 無
+	 * 
+	 * Pseudo code:
+	 * 1. 判斷要印舊還是新配分，舊的印出"舊配分:"，新的印出"請確認新配分:"
+	 * 2. 印出傳入的五個配分
+	 * 3. 判斷要印舊還是新配分，舊的印出"輸入新配分:"，新的印出"以上正確嗎?"
+	 * 
+	 * Time estimate: O(1)
+	 * Example: this.printWeight(0, 10, 10, 10, 30, 40);
+	 * 印出 舊配分: lab1:10% lab2:10% lab3:10% midTerm:30% finalExam:40%
+	 */
+	
 	private void printWeight(int para, int w1, int w2, int w3, int w4, int w5){
 		if (para==0)aUI.displayArea.setText("舊配分:\n");
 		else if(para==1)aUI.displayArea.append("\n請確認新配分:\n");
@@ -160,6 +197,22 @@ public class GradeSystems {
 		else if(para==1)aUI.displayArea.append("以上正確嗎? Y(Yes) 或  N(No):\n");
 	};
 	
+	/* method getNewWeight
+	 * 用來接受使用者輸入的新配分
+	 * @param 無
+	 * @return 一個boolean值，true代表輸入正確(配分加起來是100)，false代表輸入錯誤(加起來不是100)
+	 * 
+	 * Pseudo code:
+	 * 1. 先使用getInput得到所有的輸入
+	 * 2. 將所有輸入parse成五個數字
+	 * 3. 把五個數字暫存起來
+	 * 3. 判斷五個數字加總是否為100，是則回傳true，否則回傳false
+	 * 
+	 * Time estimate: O(1)
+	 * Example: this.getNewWeight(); 使用者輸入 40 30 10 10 10
+	 * 回傳true (因為加起來等於100)
+	 */
+	
 	private boolean getNewWeight(){
 		aUI.getInput();
 		String[] ss = aUI.userInput.split(" ");
@@ -171,6 +224,25 @@ public class GradeSystems {
 		if (weights[5]+weights[6]+weights[7]+weights[8]+weights[9]==100)return true;
 		else return false;
 	}
+	
+	/* method checkWeight
+	 * 請使用者確認新配分，讀取Y或N
+	 * @param 無
+	 * @return 一個boolean值，true代表使用者輸入Y，false代表使用者輸入N
+	 * 
+	 * Pseudo code:
+	 * 1. 外層為迴圈，作用為使用者輸入Y或N以外的東西時，要要求再次輸入
+	 * 2. 讀取輸入
+	 * 3. 如果為Y，把暫存的配分存入配分，得到新配分，
+	 * 	     並且對所有Grade呼叫calculateTotalGrade，算出所有學生新的totalGrade
+	 *    return true
+	 * 4. 如果為N，return false
+	 * 5. 如果都不是，印出"請輸入Y或N:"，繼續迴圈
+	 * 
+	 * Time estimate: 當輸入Y時為O(n)，輸入N時為O(1)
+	 * Example: this.checkWeight(); 使用者輸入 Y
+	 * 配分更新為剛才輸入的新配分，並且重新計算每個學生的totalWeight，return true
+	 */
 	
 	private boolean checkWeight(){
 		while(true)
@@ -187,6 +259,24 @@ public class GradeSystems {
 			else aUI.displayArea.append("\n請輸入Y或N:\n");
 		}
 	}
+	
+	/* method updateWeights
+	 * 當使用者輸入指令W時，讓使用者看到目前配分，以及要求輸入新配分，輸入後要求使用者確認
+	 * @param 無
+	 * @return 無
+	 * 
+	 * Pseudo code:
+	 * 1. 呼叫printWeight印出目前配分
+	 * 2. 呼叫getNewWeight()，讀取使用者輸入，並判斷是否合法
+	 * 	     不合法就印出"配分總和需為100"，繼續迴圈等待輸入
+	 * 3. 呼叫printWeight印出新配分
+	 * 4. 呼叫checkWeight()，讀取使用者確認，如果輸入為Y則結束，
+	 *    輸入N則繼續迴圈，讓使用者重新輸入他要的配分
+	 *    
+	 * Time estimate: O(n)
+	 * Example: GradeSystems物件.updateWeights();
+	 * 印出舊配分，以及要求輸入新配分，輸入後印出新配分，並要求確認
+	 */
 	
 	public void updateWeights() {
 		do{
