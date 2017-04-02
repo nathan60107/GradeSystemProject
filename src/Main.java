@@ -2,7 +2,6 @@ import java.io.IOException;
 
 public class Main {
 	static UI aUI;
-	//static int retval;
 	static String ID;
 	
 	/* method main
@@ -50,7 +49,7 @@ public class Main {
 	 * Pseudo code:
 	 * 1. 外層為迴圈，只有當輸入為E時才離開
 	 * 2. 其他指令的處理，G就呼叫showGrade，R就呼叫showRank，A就呼叫showAverage
-	 *    W就呼叫updateWeights，E就離開迴圈，輸入錯誤則印出"指令錯了"，繼續迴圈
+	 *    W就呼叫updateWeights，並呼叫checkWeights要求確認，E就離開迴圈，輸入錯誤則印出"指令錯了"，繼續迴圈
 	 *    
 	 * Time estimate: O(n)
 	 * Example: Main.loop(); 使用者輸入G，印出該學生的成績
@@ -63,10 +62,12 @@ public class Main {
 			if(retval == 0) aUI.aGradeSystem.showGrade(ID);
 			else if(retval == 1) aUI.aGradeSystem.showRank(ID);
 			else if(retval == 2) aUI.aGradeSystem.showAverage();
-			else if(retval == 3) aUI.aGradeSystem.updateWeights();
+			else if(retval == 3) {
+				do aUI.aGradeSystem.updateWeights();
+				while(!aUI.aGradeSystem.checkWeights());
+			}
 			else if(retval == 4) break;
 			else aUI.displayArea.setText("指令錯了!\n");
 		}
 	}
-
 }

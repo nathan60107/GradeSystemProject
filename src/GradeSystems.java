@@ -84,7 +84,7 @@ public class GradeSystems {
 				aUI.displayArea.setText(aGrade.name + "成績:"
 						+ "\nlab1:                " + aGrade.lab1 + ((aGrade.lab1 < 60)?"*":"")
 						+ "\nlab2:                " + aGrade.lab2 + ((aGrade.lab2 < 60)?"*":"")
-						+ "\nlab3:                " + aGrade.lab2 + ((aGrade.lab3 < 60)?"*":"")
+						+ "\nlab3:                " + aGrade.lab3 + ((aGrade.lab3 < 60)?"*":"")
 						+ "\nmid-term:       " + aGrade.midTerm + ((aGrade.midTerm < 60)?"*":"")
 						+ "\nfinal exam:     " + aGrade.finalExam + ((aGrade.finalExam < 60)?"*":"")
 						+ "\ntotal grade:    " + aGrade.totalGrade + ((aGrade.totalGrade < 60)?"*":"")+"\n\n");
@@ -190,7 +190,7 @@ public class GradeSystems {
 		else if(para==1)aUI.displayArea.append("\n請確認新配分:\n");
 		aUI.displayArea.append("lab1:                " + w1 + "%\n");
 		aUI.displayArea.append("lab2:                " + w2 + "%\n");
-		aUI.displayArea.append("lab3:                " + w2 + "%\n");
+		aUI.displayArea.append("lab3:                " + w3 + "%\n");
 		aUI.displayArea.append("mid-term:       " + w4 + "%\n");
 		aUI.displayArea.append("final exam:     " + w5 + "%\n\n");
 		if (para==0)aUI.displayArea.append("輸入新配分:(五個整數)\n");
@@ -244,7 +244,7 @@ public class GradeSystems {
 	 * 配分更新為剛才輸入的新配分，並且重新計算每個學生的totalWeight，return true
 	 */
 	
-	private boolean checkWeight(){
+	public boolean checkWeights() {
 		while(true)
 		{
 			aUI.getInput();
@@ -261,7 +261,7 @@ public class GradeSystems {
 	}
 	
 	/* method updateWeights
-	 * 當使用者輸入指令W時，讓使用者看到目前配分，以及要求輸入新配分，輸入後要求使用者確認
+	 * 當使用者輸入指令W時，讓使用者看到目前配分，以及要求輸入新配分，輸入後印出新配分
 	 * @param 無
 	 * @return 無
 	 * 
@@ -270,22 +270,17 @@ public class GradeSystems {
 	 * 2. 呼叫getNewWeight()，讀取使用者輸入，並判斷是否合法
 	 * 	     不合法就印出"配分總和需為100"，繼續迴圈等待輸入
 	 * 3. 呼叫printWeight印出新配分
-	 * 4. 呼叫checkWeight()，讀取使用者確認，如果輸入為Y則結束，
-	 *    輸入N則繼續迴圈，讓使用者重新輸入他要的配分
 	 *    
 	 * Time estimate: O(n)
 	 * Example: GradeSystems物件.updateWeights();
-	 * 印出舊配分，以及要求輸入新配分，輸入後印出新配分，並要求確認
+	 * 印出舊配分，以及要求輸入新配分，輸入後印出新配分
 	 */
 	
 	public void updateWeights() {
-		do{
-			printWeight(0, weights[0], weights[1], weights[2], weights[3], weights[4]);
-			while(!getNewWeight()){
-				aUI.displayArea.append("配分總和需為100\n");
-			}
-			printWeight(1, weights[5], weights[6], weights[7], weights[8], weights[9]);
+		printWeight(0, weights[0], weights[1], weights[2], weights[3], weights[4]);
+		while(!getNewWeight()){
+			aUI.displayArea.append("配分總和需為100\n");
 		}
-		while(!checkWeight());
+		printWeight(1, weights[5], weights[6], weights[7], weights[8], weights[9]);
 	}
 }
